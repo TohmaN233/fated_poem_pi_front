@@ -1,0 +1,18 @@
+{
+  "name": "fated_poem_pi_frontend",
+  "version": "0.1.0",
+  "description": "命定之诗与黄昏之歌 pi 游戏包的独立 Web 前端",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "./start-web.sh",
+    "start:web": "./start-web.sh",
+    "test:web": "node --test web/tests/*.test.mjs",
+    "test": "npm run test:web"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

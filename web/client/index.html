@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>命定之诗与黄昏之歌 · Web</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-kicker">FATED POEM</div>
+        <div class="brand-title">命定之诗与黄昏之歌</div>
+      </div>
+      <div class="top-actions">
+        <button id="sessionBtn" class="ghost-btn">读档</button>
+        <button id="newSessionBtn" class="ghost-btn">新游戏</button>
+        <button id="functionsBtn" class="ghost-btn accent">函数</button>
+        <button id="detailsBtn" class="ghost-btn">面板</button>
+        <button id="modelBtn" class="ghost-btn">模型</button>
+        <button id="backendBtn" class="ghost-btn">后端</button>
+        <button id="abortBtn" class="ghost-btn danger">停止</button>
+      </div>
+      <div class="connection-pill" id="connectionPill">连接中…</div>
+    </header>
+
+    <main class="game-layout">
+      <aside class="character-rail" id="characterRail">
+        <div id="charRailResize" class="pane-resize-handle right" title="拖拽调整角色栏宽度"></div>
+        <div class="rail-title">在场</div>
+        <div id="characterList" class="character-list"></div>
+      </aside>
+
+      <section class="reader-pane">
+        <div id="messageList" class="message-list"></div>
+        <form id="composer" class="composer compact-composer">
+          <input id="promptInput" type="text" autocomplete="off" placeholder="写下行动 / 命令，回车发送……" />
+        </form>
+      </section>
+
+      <aside class="status-panel" id="statusPanel">
+        <div id="statusPanelResize" class="pane-resize-handle left" title="拖拽调整状态栏宽度"></div>
+        <div class="panel-header">
+          <span>状态栏</span>
+          <button id="refreshStateBtn" class="tiny-btn">刷新</button>
+        </div>
+        <div id="statusContent" class="status-content loading">等待状态桥…</div>
+      </aside>
+    </main>
+
+    <div id="toastHost" class="toast-host"></div>
+  </div>
+
+  <dialog id="sessionDialog" class="paper-dialog wide-dialog">
+    <div class="dialog-head"><b>读取存档</b><button data-close="sessionDialog">✕</button></div>
+    <div id="sessionList" class="session-list"></div>
+  </dialog>
+
+  <dialog id="functionDialog" class="paper-dialog wide-dialog">
+    <div class="dialog-head"><b>函数面板</b><button data-close="functionDialog">✕</button></div>
+    <div class="function-toolbar"><input id="toolSearch" placeholder="搜索函数，如 get_status / memo / roll" /></div>
+    <div id="toolList" class="tool-list"></div>
+  </dialog>
+
+  <dialog id="detailsDialog" class="paper-dialog wide-dialog details-dialog">
+    <div class="dialog-head"><b>游戏面板</b><button data-close="detailsDialog">✕</button></div>
+    <div class="tabs" id="detailsTabs">
+      <button data-detail-tab="player" class="active">主角</button>
+      <button data-detail-tab="bag">背包</button>
+      <button data-detail-tab="equipment">装备</button>
+      <button data-detail-tab="skills">技能</button>
+      <button data-detail-tab="relations">关系</button>
+      <button data-detail-tab="quests">任务</button>
+      <button data-detail-tab="world">世界/新闻</button>
+      <button data-detail-tab="raw">原始状态</button>
+    </div>
+    <div id="detailsBody" class="details-body"></div>
+  </dialog>
+
+  <dialog id="modelDialog" class="paper-dialog wide-dialog">
+    <div class="dialog-head"><b>模型 / Thinking</b><button data-close="modelDialog">✕</button></div>
+    <div class="model-toolbar">
+      <span id="currentModelText">读取中…</span>
+      <button id="cycleModelBtn" class="tiny-btn">切下一个</button>
+      <select id="thinkingSelect">
+        <option value="off">thinking off</option>
+        <option value="minimal">minimal</option>
+        <option value="low">low</option>
+        <option value="medium">medium</option>
+        <option value="high">high</option>
+        <option value="xhigh">xhigh</option>
+      </select>
+    </div>
+    <div class="function-toolbar"><input id="modelSearch" placeholder="搜索模型/provider，如 deepseek / gemini / claude" /></div>
+    <div id="modelList" class="model-list"></div>
+  </dialog>
+
+  <dialog id="characterDialog" class="paper-dialog character-dialog">
+    <div class="dialog-head"><b id="characterTitle">角色</b><button data-close="characterDialog">✕</button></div>
+    <div class="tabs" id="characterTabs">
+      <button data-tab="basic" class="active">基础</button>
+      <button data-tab="equip">装备</button>
+      <button data-tab="skills">技能</button>
+      <button data-tab="bag">背包</button>
+    </div>
+    <div id="characterBody" class="character-body"></div>
+  </dialog>
+
+  <dialog id="backendDialog" class="paper-dialog wide-dialog backend-dialog">
+    <div class="dialog-head"><b>后端监听 / RPC 日志</b><button data-close="backendDialog">✕</button></div>
+    <div class="backend-toolbar">
+      <span id="backendStatus">等待连接…</span>
+      <button id="clearBackendLog" class="tiny-btn">清空</button>
+    </div>
+    <pre id="backendLog" class="backend-log"></pre>
+  </dialog>
+
+  <dialog id="avatarCropDialog" class="paper-dialog crop-dialog">
+    <div class="dialog-head"><b>裁剪头像显示区域</b><button data-close="avatarCropDialog">✕</button></div>
+    <div class="crop-body">
+      <div id="cropViewport" class="crop-viewport">
+        <img id="cropImage" alt="裁剪头像" draggable="false" />
+      </div>
+      <div class="crop-controls">
+        <label>缩放 <input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1" /></label>
+        <div class="crop-hint">拖动图片选择固定头像框里显示的区域；滚轮可缩放。</div>
+        <div class="crop-actions">
+          <button id="cropCancelBtn" class="soft-btn">取消</button>
+          <button id="cropSaveBtn" class="send-btn">保存裁剪</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

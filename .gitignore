@@ -1,0 +1,31 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Frontend-local runtime data
+user/style.md
+user/web-avatars.json
+user/images/
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+*secret*
+*token*
+*auth*
+*.pem
+*.key
+
+# Runtime / temp
+sessions/
+state/
+.pi/
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
