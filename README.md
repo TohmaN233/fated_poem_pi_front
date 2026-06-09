@@ -61,15 +61,3 @@ MEMPALACE_RPG_PALACE=off
 ```
 
 参见 `.env.example`。
-
-## 不会提交的本地数据
-
-`.gitignore` 默认排除：
-
-- `user/style.md`
-- `user/web-avatars.json`
-- `user/images/`
-- `.env*`
-- `sessions/`、`state/`、`.pi/` 等运行数据
-
-游戏包自己的存档、认证、状态与记忆库留在游戏包目录内，不属于本前端仓库。
