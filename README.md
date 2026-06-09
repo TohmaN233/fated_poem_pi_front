@@ -45,9 +45,8 @@ DEST_POET_GAME_DIR=/absolute/path/to/fated-poem-dusk-song ./start-web.sh
 
 1. 检查外部游戏包目录是否完整；
 2. 在游戏包目录内安装运行依赖（如缺失）；
-3. 在游戏包目录内创建本地 `.pi/agent/`、`sessions/` 与 `.fated_poem_pi_frontend/`；
-4. 将本仓库的桥接扩展复制到游戏目录的 `.fated_poem_pi_frontend/web-bridge.ts`；
-5. 启动本仓库的 Web UI，并让 `pi` 在外部游戏包目录中运行。
+3. 将本仓库的桥接扩展复制到游戏目录的 `.fated_poem_pi_frontend/web-bridge.ts`；
+4. 启动本仓库的 Web UI，并让 `pi` 在外部游戏包目录中运行。
 
 ## 可选环境变量
 
